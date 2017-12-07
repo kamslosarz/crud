@@ -44,15 +44,15 @@ class Kernel
         ]);
 
         $isDevMode = true;
-        $config = Setup::createYAMLMetadataConfiguration(array(__DIR__."/config/yaml"), $isDevMode);
+        $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/../src/"), $isDevMode);
         $conn = array(
             'driver' => 'pdo_sqlite',
             'path' => __DIR__ . '../data/database.sqlite',
         );
 
         $entityManager = EntityManager::create($conn, $config);
-
         $controller->setTwig($twig);
+        $controller->setEntityManager($entityManager);
         $response->setContent($dispatcher->dispatch($controller, $request));
         return $response;
     }

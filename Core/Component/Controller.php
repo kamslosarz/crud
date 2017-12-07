@@ -2,8 +2,12 @@
 
 namespace Core\Component;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @property EntityManager entityManager
+ */
 class Controller
 {
     /** @var Request $request */
@@ -26,6 +30,13 @@ class Controller
      */
     public function setTwig(\Twig_Environment $twig){
         $this->twig = $twig;
+    }
+
+    /**
+     * @param EntityManager $entityManager
+     */
+    public function setEntityManager(EntityManager $entityManager){
+        $this->entityManager = $entityManager;
     }
 }
 

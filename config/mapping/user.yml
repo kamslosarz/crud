@@ -1,0 +1,17 @@
+User:
+  type: entity
+  table: user
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    name:
+      type: string
+    surname:
+      type: string
+    phone:
+      type: string
+    address:
+      type: string

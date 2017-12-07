@@ -8,11 +8,11 @@ require __DIR__ . '/vendor/autoload.php';
 spl_autoload_register(function ($name) {
     $file = sprintf('%s.php', str_replace('\\', '/', $name));
     if (file_exists($file)) {
-        require sprintf('%s.php', str_replace('\\', '/', $name));
+        require_once sprintf('%s.php', str_replace('\\', '/', $name));
     } else {
         $file = sprintf('src/%s.php', str_replace('\\', '/', $name));
         if (file_exists($file)) {
-            require sprintf('src/%s.php', str_replace('\\', '/', $name));
+            require_once sprintf('src/%s.php', str_replace('\\', '/', $name));
         }
     }
 });
