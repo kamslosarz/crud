@@ -1,0 +1,14 @@
+{
+    "name": "root/crud",
+    "authors": [
+        {
+            "name": "Kamil",
+            "email": "ka.slosarz@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/http-foundation": "^4.0",
+        "symfony/var-dumper": "^4.0",
+        "twig/twig": "^2.4"
+    }
+}
