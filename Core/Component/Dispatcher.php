@@ -15,7 +15,11 @@ class Dispatcher
             $params[$name] = $value;
         }
 
-        return $controller->{$request->query->get('action')}($request, ...$params);
+        if (method_exists($controller, $request->query->get('action'))) {
+            dump($controller->{$request->query->get('action')}($request, ...$params));
+        }
+
+        return null;
     }
 }
 
