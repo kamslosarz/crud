@@ -1,5 +1,30 @@
 {% extends 'base.html.twig' %}
 {% block title %}{% endblock %}
 {% block content %}
-
+    <a href="/user/new">
+        New user
+    </a>
+    <table>
+        {% for user in users %}
+            <tr>
+                <td>
+                    {{ user.name }}
+                </td>
+                <td>
+                    {{ user.surname }}
+                </td>
+                <td>
+                    {{ user.phone }}
+                </td>
+                <td>
+                    {{ user.address }}
+                </td>
+                <td>
+                    <a href="/user/delete/{{ user.id }}">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

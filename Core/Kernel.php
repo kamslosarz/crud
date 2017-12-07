@@ -9,6 +9,8 @@ use Core\Component\Dispatcher;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use Phalcon\Mvc\Application;
+use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
+use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,16 +49,21 @@ class Kernel
                 'cache' => false
             ]);
 
-            $isDevMode = true;
-            $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/../src/Entity"), $isDevMode);
+            $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/../src/Entity"), true);
             $conn = array(
                 'driver' => 'pdo_sqlite',
-                'path' => __DIR__ . '../data/database.sqlite',
+                'path' => __DIR__ . '/../data/database.sqlite',
             );
 
             $entityManager = EntityManager::create($conn, $config);
+            $entityManager->getMetadataFactory()->getAllMetadata();
+            $formFactory = Forms::createFormFactoryBuilder()
+                ->addExtension(new HttpFoundationExtension())
+                ->getFormFactory();
+
             $controller->setTwig($twig);
             $controller->setEntityManager($entityManager);
+            $controller->setFormFactory($formFactory);
 
             $response->setContent($dispatcher->dispatch($controller, $request));
         }

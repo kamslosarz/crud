@@ -3,6 +3,8 @@
 namespace Core\Component;
 
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -15,6 +17,9 @@ class Controller
 
     /**@var \Twig_Environment $twig */
     public $twig;
+
+    /**@var FormFactoryInterface $twig */
+    public $formFactory;
 
     /**
      * Controller constructor.
@@ -42,11 +47,19 @@ class Controller
     }
 
     /**
+     * @param FormFactoryInterface $formFactory
+     */
+    public function setFormFactory(FormFactoryInterface $formFactory)
+    {
+        $this->formFactory = $formFactory;
+    }
+
+    /**
      * @param $name
      * @param $params
      * @return string
      */
-    public function render($name, $params)
+    public function render($name, array $params = null)
     {
         try {
             return $this->twig->render($name, $params);

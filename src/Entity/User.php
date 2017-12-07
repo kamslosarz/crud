@@ -1,30 +1,26 @@
 <?php
-
-namespace App\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
+// src/Entity/User.php
+namespace Entity;
 
 /**
- * @ORM\Entity() @Table(name="user")
+ * @Entity() @Table(name="user")
  **/
 class User
 {
-    /**
-     * @id @ORM\Column(type="integer") @GeneratedValue
-     */
-    protected $id;
+    /** @Id @Column(type="integer") @GeneratedValue **/
+    private $id;
 
-    /** @ORM\Column(type="string") @GeneratedValue **/
-    protected $name;
+    /** @Column(type="string") **/
+    private $name;
 
-    /** @ORM\Column(type="string") @GeneratedValue **/
-    protected $surname;
+    /** @Column(type="string") **/
+    private $surname;
 
-    /** @ORM\Column(type="string") @GeneratedValue **/
-    protected $phone;
+    /** @Column(type="string") **/
+    private $phone;
 
-    /** @ORM\Column(type="string") @GeneratedValue **/
-    protected $address;
+    /** @Column(type="string") **/
+    private $address;
 
     public function getId()
     {
