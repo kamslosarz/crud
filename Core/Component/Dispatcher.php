@@ -7,16 +7,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Dispatcher
 {
-    public function dispatch(Controller $controller, Request $request)
+    public function dispatch(Controller $controller,Request $request,  Route $route)
     {
-        $params = [];
-
-        foreach ($request->request as $name => $value) {
-            $params[$name] = $value;
-        }
-
-        if (method_exists($controller, $request->query->get('action'))) {
-            return $controller->{$request->query->get('action')}($request, ...$params);
+        if (method_exists($controller, $route->getAction())) {
+            if($route->getParams()){
+                return $controller->{$route->getAction()}($request, ...array_values($route->getParams()));
+            }else{
+                return $controller->{$route->getAction()}($request);
+            }
         }
 
         return null;

@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * @property EntityManager entityManager
@@ -56,8 +57,8 @@ class Controller
 
     /**
      * @param $name
-     * @param $params
-     * @return string
+     * @param array|null $params
+     * @return null|string
      */
     public function render($name, array $params = null)
     {
@@ -65,16 +66,25 @@ class Controller
             return $this->twig->render($name, $params);
         } catch (\Twig_Error_Loader $e) {
             dump($e);
-            exit;
         } catch (\Twig_Error_Runtime $e) {
             dump($e);
-            exit;
         } catch (\Twig_Error_Syntax $e) {
             dump($e);
-            exit;
         }
 
         return null;
+    }
+
+    /**
+     * @param $message
+     * @return $this
+     */
+    public function addFlash($message){
+        /** @var Session $session */
+        $session = $this->request->getSession();
+        $session->set('message', $message);
+
+        return $this;
     }
 }
 

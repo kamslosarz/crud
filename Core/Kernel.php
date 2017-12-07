@@ -4,6 +4,7 @@ namespace Core;
 
 use Core\Component\Controller;
 use Core\Component\Dispatcher;
+use Core\Component\Route;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use Symfony\Bridge\Twig\Extension\FormExtension;
@@ -13,6 +14,7 @@ use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class Kernel
 {
@@ -23,20 +25,17 @@ class Kernel
      */
     public function handle(Request $request)
     {
-        $params = explode('/', $request->getRequestUri());
-        $request->query = new ParameterBag([
-            'action' => ((isset($params[2]) && $params[2]) ? $params[2] : 'index') . 'Action'
-        ]);
-        $request->request = new ParameterBag(
-            $_POST
-        );;
+        $session = new Session();
+        $session->start();
+        $request->setSession($session);
+
+        $route = new Route($request);
 
         $response = new Response();
         $dispatcher = new Dispatcher();
-        $controller = 'App\\Controller\\' . ((isset($params[1]) && $params[1]) ? ucfirst(strtolower($params[1])) : 'Default') . 'Controller';
+        $controller = 'App\\Controller\\' . ($route->getControllerName() ? ucfirst(strtolower($route->getControllerName())) : 'Default') . 'Controller';
 
         if (class_exists($controller, true)) {
-
             /** @var Controller $controller */
             $controller = new $controller($request);
             $loader = new \Twig_Loader_Filesystem([
@@ -50,6 +49,16 @@ class Kernel
             ]);
 
             $twig->addExtension(new \Twig_Extension_Debug());
+
+            $twig->addFunction(new \Twig_Function('flashMessage', function () use ($session) {
+                $message = $session->get('message');
+                $session->set('message', '');
+
+                return $message;
+            }));
+            $twig->addFunction(new \Twig_Function('hasMessage', function () use ($session) {
+                return $session->has('message');
+            }));
 
             $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/../src/Entity"), true);
             $conn = array(
@@ -67,7 +76,7 @@ class Kernel
             $controller->setEntityManager($entityManager);
             $controller->setFormFactory($formFactory);
 
-            $response->setContent($dispatcher->dispatch($controller, $request));
+            $response->setContent($dispatcher->dispatch($controller, $request, $route));
         }
 
         return $response;

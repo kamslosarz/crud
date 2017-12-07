@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Edit User {{ form.data.name }}
+{% endblock %}
+{% block content %}
+    <form action="/user/edit/{{ form.data.id }}" method="POST">
+        <label>Name</label>
+        <input name="user[name]" value="{{ form.data.name }}"><br>
+        <label>Surname</label>
+        <input name="user[surname]" value="{{ form.data.surname }}"><br>
+        <label>Phone</label>
+        <input name="user[phone]" value="{{ form.data.phone }}"><br>
+        <label>Address</label>
+        <input name="user[address]" value="{{ form.data.address }}"><br>
+        <input type="submit" value="save">
+    </form>
+{% endblock %}

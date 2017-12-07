@@ -1,0 +1,3 @@
+User:
+  delete: /user/delete/[:id]
+  edit: /user/edit/[:id]

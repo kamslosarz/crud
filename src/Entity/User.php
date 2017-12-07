@@ -46,6 +46,40 @@ class User
     {
         return $this->address;
     }
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function setSurname($surname)
+    {
+        $this->surname = $surname;
+
+        return $this;
+    }
+
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
 }
 
 ?>
