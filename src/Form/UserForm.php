@@ -1,6 +1,6 @@
 <?php
 
-namespace Form;
+namespace App\Form;
 
 use Core\Component\Form;
 

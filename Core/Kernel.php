@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use App\Controller\DefaultController;
+use App\Controller\UserController;
 use Core\Component\Controller;
 use Core\Component\Dispatcher;
 use Doctrine\ORM\EntityManager;
@@ -21,9 +23,8 @@ class Kernel
     public function handle(Request $request)
     {
         $params = explode('/', $request->getRequestUri());
-
         $request->query = new ParameterBag([
-            'action' => ((isset($params[1]) && $params[1]) ? $params[1] : 'index') . 'Action'
+            'action' => ((isset($params[2]) && $params[2]) ? $params[2] : 'index') . 'Action'
         ]);
         $request->request = new ParameterBag(
             $_POST
@@ -31,29 +32,35 @@ class Kernel
 
         $response = new Response();
         $dispatcher = new Dispatcher();
-        $controller = 'Controller\\' . ((isset($params[0]) && $params[0]) ? ucfirst(strtolower($params[0])) : 'Default') . 'Controller';
+        $controller = 'App\\Controller\\' . ((isset($params[1]) && $params[1]) ? ucfirst(strtolower($params[1])) : 'Default') . 'Controller';
 
-        /** @var Controller $controller */
-        $controller = new $controller($request);
-        $loader = new \Twig_Loader_Filesystem([
-            dirname(__DIR__) . '/src/View/'
-        ]);
+        if (class_exists($controller, true)) {
 
-        $twig = new \Twig_Environment($loader, [
-            'cache' => dirname(__DIR__) . '/cache'
-        ]);
+            /** @var Controller $controller */
+            $controller = new $controller($request);
+            $loader = new \Twig_Loader_Filesystem([
+                dirname(__DIR__) . '/src/View/'
+            ]);
 
-        $isDevMode = true;
-        $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/../src/"), $isDevMode);
-        $conn = array(
-            'driver' => 'pdo_sqlite',
-            'path' => __DIR__ . '../data/database.sqlite',
-        );
+            $twig = new \Twig_Environment($loader, [
+                //'cache' => dirname(__DIR__) . '/cache'
+                'cache' => false
+            ]);
 
-        $entityManager = EntityManager::create($conn, $config);
-        $controller->setTwig($twig);
-        $controller->setEntityManager($entityManager);
-        $response->setContent($dispatcher->dispatch($controller, $request));
+            $isDevMode = true;
+            $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/../src/Entity"), $isDevMode);
+            $conn = array(
+                'driver' => 'pdo_sqlite',
+                'path' => __DIR__ . '../data/database.sqlite',
+            );
+
+            $entityManager = EntityManager::create($conn, $config);
+            $controller->setTwig($twig);
+            $controller->setEntityManager($entityManager);
+
+            $response->setContent($dispatcher->dispatch($controller, $request));
+        }
+
         return $response;
     }
 }
