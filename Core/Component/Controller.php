@@ -64,8 +64,14 @@ class Controller
         try {
             return $this->twig->render($name, $params);
         } catch (\Twig_Error_Loader $e) {
+            dump($e);
+            exit;
         } catch (\Twig_Error_Runtime $e) {
+            dump($e);
+            exit;
         } catch (\Twig_Error_Syntax $e) {
+            dump($e);
+            exit;
         }
 
         return null;

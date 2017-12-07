@@ -50,7 +50,6 @@ class UserController extends Controller
         return $this->render('user/new.html.twig', [
             'form' => $form->createView()
         ]);
-
     }
 
     public function deleteAction(Request $request, array $params = null)

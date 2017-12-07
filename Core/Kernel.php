@@ -2,13 +2,12 @@
 
 namespace Core;
 
-use App\Controller\DefaultController;
-use App\Controller\UserController;
 use Core\Component\Controller;
 use Core\Component\Dispatcher;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
-use Phalcon\Mvc\Application;
+use Symfony\Bridge\Twig\Extension\FormExtension;
+use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -46,8 +45,11 @@ class Kernel
 
             $twig = new \Twig_Environment($loader, [
                 //'cache' => dirname(__DIR__) . '/cache'
-                'cache' => false
+                'cache' => false,
+                'debug' => true
             ]);
+
+            $twig->addExtension(new \Twig_Extension_Debug());
 
             $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/../src/Entity"), true);
             $conn = array(
