@@ -32,13 +32,16 @@ class Kernel
 
         /** @var Controller $controller */
         $controller = new $controller($request);
-        $loader = new \Twig_Loader_Filesystem(dirname(__DIR__).'/src/View/');
+        $loader = new \Twig_Loader_Filesystem([
+            dirname(__DIR__).'/src/View/'
+        ]);
+
         $twig = new \Twig_Environment($loader, [
             'cache' => dirname(__DIR__).'/cache'
         ]);
+
         $controller->setTwig($twig);
         $response->setContent($dispatcher->dispatch($controller, $request));
-
         return $response;
     }
 }

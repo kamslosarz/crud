@@ -16,7 +16,7 @@ class Dispatcher
         }
 
         if (method_exists($controller, $request->query->get('action'))) {
-            dump($controller->{$request->query->get('action')}($request, ...$params));
+            return $controller->{$request->query->get('action')}($request, ...$params);
         }
 
         return null;
