@@ -9,6 +9,7 @@
     "require": {
         "symfony/http-foundation": "^4.0",
         "symfony/var-dumper": "^4.0",
-        "twig/twig": "^2.4"
+        "twig/twig": "^2.4",
+        "doctrine/orm": "^2.5"
     }
 }
